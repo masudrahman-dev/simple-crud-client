@@ -2,14 +2,38 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 
 const Create = () => {
-  const [isopen, setIsopen] = useState(null);
+  const [isOpen, setIsOpen] = useState(null);
+
+  const hangleSubmit = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const name = form.name.value;
+    const price = form.price.value;
+    const brand = form.brand.value;
+    const description = form.description.value;
+    const category = form.category.value;
+    const product = { name, price, brand, description, category };
+
+    // console.log(name, price, brand, description, category);
+    console.log("product :>> ", product);
+    fetch("http://localhost:3000/products", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify(product),
+    })
+      .then((response) => response.json())
+      .then((json) => console.log(json));
+  };
+
   return (
     <div className="flex justify-center m-5">
       {/* <!-- Modal toggle --> */}
       <div className="flex flex-col items-center">
         <div>
           <button
-            onClick={() => setIsopen(true)}
+            onClick={() => setIsOpen(true)}
             className=" text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
             type="button"
           >
@@ -21,7 +45,7 @@ const Create = () => {
         <div
           tabIndex="-1"
           className={`" w-full md:inset-0 h-modal md:h-full " ${
-            isopen ? "block" : "hidden"
+            isOpen ? "block" : "hidden"
           }`}
         >
           <div className="relative p-4 w-full max-w-2xl h-full md:h-auto">
@@ -33,7 +57,7 @@ const Create = () => {
                   Add Product
                 </h3>
                 <button
-                  onClick={() => setIsopen(false)}
+                  onClick={() => setIsOpen(false)}
                   type="button"
                   data-modal-toggle="defaultModal"
                   className={`"text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"`}
@@ -55,7 +79,7 @@ const Create = () => {
                 </button>
               </div>
               {/* <!-- Modal body --> */}
-              <form>
+              <form onSubmit={hangleSubmit}>
                 <div className="grid gap-4 mb-4 sm:grid-cols-2">
                   <div>
                     <label
@@ -113,6 +137,7 @@ const Create = () => {
                       Category
                     </label>
                     <select
+                      name="category"
                       id="category"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     >
